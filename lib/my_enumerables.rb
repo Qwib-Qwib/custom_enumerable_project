@@ -1,9 +1,7 @@
 module Enumerable
   # Your code goes here
   def my_all?
-    for item in self do
-      return false if yield(item) == false
-    end
+    my_each { |element| return false if yield(element) == false }
     true
   end
 
@@ -33,6 +31,30 @@ module Enumerable
       index += 1
     end
     self
+  end
+
+  def my_inject(initial_value = 0)
+    for item in self do
+      initial_value = yield(initial_value, item)
+    end
+    initial_value
+  end
+
+  def my_map
+    new_array = []
+    my_each { |element| new_array.push(yield(element)) }
+    new_array
+  end
+
+  def my_none?
+    my_each { |element| return false if yield(element) }
+    true
+  end
+
+  def my_select
+    selected_items = []
+    my_each { |element| selected_items.push(element) if yield(element) }
+    selected_items
   end
 end
 
