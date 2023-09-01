@@ -6,18 +6,14 @@ module Enumerable
   end
 
   def my_any?
-    for item in self do
-      return true if yield(item) == true
-    end
+    my_each { |element| return true if yield(element) }
     false
   end
 
   def my_count
     if block_given?
       count = 0
-      for item in self do
-        count += 1 if yield(item) == true
-      end
+      my_each { |element| count += 1 if yield(element) }
       count
     else
       length
@@ -26,17 +22,15 @@ module Enumerable
 
   def my_each_with_index
     index = 0
-    for item in self do
-      yield(item, index)
+    my_each do |element|
+      yield(element, index)
       index += 1
     end
     self
   end
 
   def my_inject(initial_value = 0)
-    for item in self do
-      initial_value = yield(initial_value, item)
-    end
+    my_each { |element| initial_value = yield(initial_value, element) }
     initial_value
   end
 
